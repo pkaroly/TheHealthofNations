@@ -1,4 +1,4 @@
-d3.json("resources/nations.json", function(nations) { 
+d3.json("nations.json", function(nations) { 
 	
 	// select chart area
 	var chart_area = d3.select("#chart_area");
