@@ -23,4 +23,4 @@ d3.json("resources/nations.json", function(nations) {
 
 	var first_circle = canvas.append("circle");
 	first_circle.attr("r", '40px')
-};
+});
