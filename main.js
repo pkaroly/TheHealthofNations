@@ -20,4 +20,7 @@ d3.json("resources/nations.json", function(nations) {
 
 	// Shift the canvas and make it slightly smaller than the svg canvas.
 	canvas.attr("transform", "translate("+ margin.left +","+ margin.top +")";
+
+	var first_circle = canvas.append("circle");
+	first_circle.attr("r", '40px')
 };
