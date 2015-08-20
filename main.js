@@ -1,8 +1,8 @@
 d3.json("nations.json", function(nations) { 
 
     // init
-	var filtered_nations = nations.map(function(nation) { return nation; });
-    var year_idx = parseInt(document.getElementById("year_slider").value)-1950;
+	   var filtered_nations = nations.map(function(nation) { return nation; });
+     var year_idx = parseInt(document.getElementById("year_slider").value)-1950;
 
     // the cursor pointer
     var tooltip = d3.select("body")
@@ -54,7 +54,6 @@ d3.json("nations.json", function(nations) {
 
     return averageData;
 }
-console.log(region_data)
 	
 	// select chart area
 	var chart_area = d3.select("#chart_area");
@@ -123,14 +122,17 @@ console.log(region_data)
   	if (this.checked) { // adding data points 
   		var new_nations = nations.filter(function(nation){ return nation.region == this_region;});
   		filtered_nations = filtered_nations.concat(new_nations);
-        var new_reg_nations = region_data.filter(function(nation){return nation.region == this_region;});
-        filtered_reg_nations = filtered_reg_nations.concat(new_reg_nations);
+      console.log(filtered_reg_nations)
+      var new_regions = region_data.filter(function(nation){return nation.region == this_region;});
+      filtered_reg_nations = filtered_reg_nations.concat(new_regions);
         }
   	else {
+      console.log(filtered_reg_nations)
   		filtered_nations = filtered_nations.filter(function(nation){ 
   			return nation.region != this_region;});
         filtered_reg_nations = filtered_reg_nations.filter(function(nation){
-            return nation.region != this_region;});
+        return nation.region != this_region;});
+        console.log(filtered_reg_nations)
   		}
         update(year_idx);
   });
@@ -140,20 +142,38 @@ console.log(region_data)
     update(year_idx);
 });
 
+
+    //"http://lorempixel.com/400/200/cats"/>
+    
     function update(year_idx) {
-       
+
        var dot = data_canvas.selectAll(".dot")
                             .data(filtered_nations, function(d){return d.name});
 
        var avdot = data_canvas.selectAll(".avdot")
-                            .data(filtered_reg_nations);
-    
+                            .data(filtered_reg_nations, function(d){return d.region});
+
 
     dot.enter().append("circle").attr("class","dot")                        
             .style("fill", function(d) { return colScale(d.region); })
             .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name);})
             .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
-            .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+            .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+            .filter(function(d){return d.name == "Japan"})
+            .on("click",function(){
+              var cat = d3.select("#catpic")
+              .style("display",'inline')
+              .on("click",function(){
+              var new_title = document.getElementById("heading");
+              new_title.innerHTML = "The Wealth & Health of the Nations";
+              var cat = d3.select("#catpic")
+              .style("display",'none')
+              d = new Date();
+              $("#catpic").attr("src",'http://lorempixel.com/800/600/cats?'+d.getTime());
+              });
+              var new_title = document.getElementById("heading");
+              new_title.innerHTML = "Arigato!! You are fanCATStic teachers xx";
+              });
     
     dot.exit().remove();
     
@@ -166,11 +186,14 @@ console.log(region_data)
       .attr("r", function(d) {return circScale(d.population[year_idx])})
       .attr("fill",function(d){return colScale(d.region)});
 
+
       // REGION DOTS
 
     avdot.enter().append("rect").attr("class","avdot")                        
-            .style("stroke",'black')
-            .style("stroke-width",'4')
+            .attr("stroke",'black')
+            .attr("stroke-width",'4')
+            .attr("width",'20')
+            .attr("height",'20')
 
     avdot.exit().remove();
     
@@ -179,10 +202,7 @@ console.log(region_data)
       .attr("x", function(d) {return xScale(d.mean_income[year_idx]); })
       // life expectancy - vertical
       .attr("y", function(d) {return yScale(d.mean_lifeExpectancy[year_idx]);})
-      .attr("width",'20')
-      .attr("height",'20')
       .attr("fill", function(d){return colScale(d.region)});
-
 
     }
 
