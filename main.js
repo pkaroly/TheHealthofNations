@@ -33,7 +33,7 @@ d3.json("nations.json", function(nations) {
 	.domain([250, 1e5])
 	.range([0, canvas_width]);
 	var yScale = d3.scale.linear()
-	.domain([10, 85])
+	.domain([85, 10])
 	.range([0, canvas_height]);
 
 	// create the axes
